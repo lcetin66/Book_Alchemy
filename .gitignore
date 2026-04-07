@@ -1,0 +1,12 @@
+__pycache__
+.DS_Store
+.env
+.env.example
+.env.local
+.env.prod
+.env.dev
+.env.test
+.env.example
+.idea
+.venv
+.vscode
