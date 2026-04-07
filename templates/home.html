@@ -11,9 +11,17 @@
     <h1>Book Alchemy 📚</h1>
 
     <div style="margin-bottom: 20px;">
+        <form action="/" method="GET" style="margin-bottom: 20px;">
+            <input type="text" name="search" placeholder="Book title or author..." value="{{ request.args.get('search', '') }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
         Sort by:
         <a href="{{ url_for('home', sort_by='title') }}">Title</a> | 
-        <a href="{{ url_for('home', sort_by='author') }}">Author</a>
+        <a href="{{ url_for('home', sort_by='author') }}">Author</a> |
+        <a href="{{ url_for('home', sort_by='year') }}">Year</a>
     </div>
 
     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
