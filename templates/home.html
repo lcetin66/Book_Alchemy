@@ -4,17 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Alchemy - Library</title>
 </head>
 
 <body>
+    <h1>Book Alchemy 📚</h1>
 
-    {% for book in books %}
-    <div>
-        <h3>{{ book.title }}</h3>
+    <div style="margin-bottom: 20px;">
+        Sort by:
+        <a href="{{ url_for('home', sort_by='title') }}">Title</a> | 
+        <a href="{{ url_for('home', sort_by='author') }}">Author</a>
     </div>
-    {% endfor %}
 
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        {% for book in books %}
+        <div style="border: 1px solid #ccc; padding: 10px; width: 220px; text-align: center;">
+            <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover of {{ book.title }}" style="width: 150px; height: auto; display: block; margin: 0 auto 10px;">
+            <h3>{{ book.title }}</h3>
+            <p><strong>Author:</strong> {{ book.author.name }}</p>
+            <p><strong>Year:</strong> {{ book.publication_year }}</p>
+            <p><small>ISBN: {{ book.isbn }}</small></p>
+        </div>
+        {% else %}
+        <p>Your library is empty. Please add some authors and books!</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+    <p>
+        <a href="/add_author">Add Author</a> | 
+        <a href="/add_book">Add Book</a>
+    </p>
 </body>
 
 </html>
