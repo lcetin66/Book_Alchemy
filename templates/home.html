@@ -1,55 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Alchemy - Library</title>
-</head>
+{% block title %}Book Alchemy - Library{% endblock %}
 
-<body>
-    <h1>Book Alchemy 📚</h1>
-
-    <div style="margin-bottom: 20px;">
-        <form action="/" method="GET" style="margin-bottom: 20px;">
-            <input type="text" name="search" placeholder="Book title or author..." value="{{ request.args.get('search', '') }}">
-            <button type="submit">Search</button>
-        </form>
-    </div>
-    
-    <div style="margin-bottom: 20px;">
-        Sort by:
-        <a href="{{ url_for('home', sort_by='title') }}">Title</a> | 
-        <a href="{{ url_for('home', sort_by='author') }}">Author</a> |
-        <a href="{{ url_for('home', sort_by='year') }}">Year</a>
+{% block content %}
+    <div class="sort-options">
+        <span>Sort by</span>
+        <a href="{{ url_for('home', sort_by='title', search=request.args.get('search', '')) }}">Title</a>
+        <a href="{{ url_for('home', sort_by='author', search=request.args.get('search', '')) }}">Author</a>
+        <a href="{{ url_for('home', sort_by='year', search=request.args.get('search', '')) }}">Year</a>
     </div>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <div class="book-grid">
         {% for book in books %}
-        <div style="border: 1px solid #ccc; padding: 10px; width: 220px; text-align: center;">
-            <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="Cover of {{ book.title }}" style="width: 150px; height: auto; display: block; margin: 0 auto 10px;">
-            <h3>{{ book.title }}</h3>
-            <p><strong>Author:</strong> {{ book.author.name }}</p>
-            <p><strong>Year:</strong> {{ book.publication_year }}</p>
-            <p><small>ISBN: {{ book.isbn }}</small></p>
-            <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST" style="margin-top: 10px;" onsubmit="return confirm('Are you sure you want to delete this book?');">
-                <button type="submit" style="background-color: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">Delete</button>
+        <div class="book-card">
+            <a href="{{ url_for('book_details', book_id=book.id) }}" style="text-decoration: none; color: inherit;">
+                <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="{{ book.title }}" class="book-cover">
+                <h3 class="book-title">{{ book.title }}</h3>
+            </a>
+            <p class="book-author">
+                <a href="{{ url_for('author_details', author_id=book.author.id) }}" style="text-decoration: none; color: inherit; border-bottom: 1px solid transparent; transition: 0.3s;" onmouseover="this.style.borderColor='var(--text-secondary)'" onmouseout="this.style.borderColor='transparent'">
+                    {{ book.author.name }}
+                </a>
+            </p>
+            <p class="book-year">{{ book.publication_year }}</p>
+            
+            <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                <button type="submit" class="btn-delete">Remove Collection —</button>
             </form>
         </div>
         {% else %}
-            {% if search_query %}
-                <p>No books found matching "<strong>{{ search_query }}</strong>". <a href="/">Clear search</a></p>
-            {% else %}
-                <p>Your library is empty. Please add some authors and books!</p>
-            {% endif %}
+            <div style="grid-column: 1 / -1; padding: 10rem 0; text-align: center; border-top: 1px solid var(--border-color);">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem;">Archive is empty.</h2>
+                {% if search_query %}
+                    <p style="color: var(--text-secondary);">No matches for "{{ search_query }}". <a href="/" style="color: var(--accent);">Reset</a></p>
+                {% else %}
+                    <p style="color: var(--text-secondary);">Your collection begins here.</p>
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
-
-    <hr>
-    <p>
-        <a href="/add_author">Add Author</a> | 
-        <a href="/add_book">Add Book</a>
-    </p>
-</body>
-
-</html>
+{% endblock %}

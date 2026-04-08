@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Book Alchemy{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="branding">
+                <a href="/" style="text-decoration: none;"><h1>Alchemy.</h1></a>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--text-secondary);">Curated Digital Archive</p>
+            </div>
+            
+            <form action="/" method="GET" class="search-bar">
+                <input type="text" name="search" placeholder="Refine search..." value="{{ request.args.get('search', '') }}">
+                <button type="submit"><i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="nav-links">
+            <a href="{{ url_for('add_author') }}" class="btn-action">Add Author</a>
+            <a href="{{ url_for('add_book') }}" class="btn-action">Add Book</a>
+        </footer>
+    </div>
+</body>
+</html>

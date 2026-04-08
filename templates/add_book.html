@@ -1,45 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Book</title>
-</head>
+{% block title %}New Book — Book Alchemy{% endblock %}
 
-<body>
-    <h1>Add a New Book</h1>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <p style="color: {% if category == 'success' %}green{% else %}red{% endif %};">{{ message }}</p>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
+{% block content %}
+<div class="form-card">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 3rem;">Catalog Book</h2>
     <form action="/add_book" method="POST">
-        <label for="isbn">ISBN:</label>
-        <input type="text" id="isbn" name="isbn" required><br><br>
-
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required><br><br>
-
-        <label for="publication_year">Publication Year:</label>
-        <input type="text" id="publication_year" name="publication_year" required><br><br>
-
-        <label for="author_id">Author:</label>
-        <select name="author_id" id="author_id" required>
-            <option value="">--Select an Author--</option>
-            {% for author in authors %}
-                <option value="{{ author.id }}">{{ author.name }}</option>
-            {% endfor %}
-        </select><br><br>
-
-        <input type="submit" value="Add Book">
+        <div class="form-group">
+            <label for="isbn">ISBN Identifier</label>
+            <input type="text" id="isbn" name="isbn" required placeholder="9780000000000">
+        </div>
+        
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required placeholder="The Great Gatsby">
+        </div>
+        
+        <div class="form-group">
+            <label for="publication_year">Year of Release</label>
+            <input type="text" id="publication_year" name="publication_year" required placeholder="1925">
+        </div>
+        
+        <div class="form-group">
+            <label for="author_id">Author</label>
+            <select name="author_id" id="author_id" required>
+                <option value="">Choose from records...</option>
+                {% for author in authors %}
+                    <option value="{{ author.id }}">{{ author.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn-submit">Add to Archive</button>
     </form>
-
-    <p><a href="/">Back to Home</a> | <a href="/add_author">Add Author</a></p>
-</body>
-
-</html>
+    
+    <p style="margin-top: 3rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">
+        <a href="/" style="color: var(--text-secondary); text-decoration: none;">&larr; Return to Library</a>
+    </p>
+</div>
+{% endblock %}
