@@ -32,9 +32,16 @@
             <p><strong>Author:</strong> {{ book.author.name }}</p>
             <p><strong>Year:</strong> {{ book.publication_year }}</p>
             <p><small>ISBN: {{ book.isbn }}</small></p>
+            <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST" style="margin-top: 10px;" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                <button type="submit" style="background-color: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">Delete</button>
+            </form>
         </div>
         {% else %}
-        <p>Your library is empty. Please add some authors and books!</p>
+            {% if search_query %}
+                <p>No books found matching "<strong>{{ search_query }}</strong>". <a href="/">Clear search</a></p>
+            {% else %}
+                <p>Your library is empty. Please add some authors and books!</p>
+            {% endif %}
         {% endfor %}
     </div>
 

@@ -80,14 +80,18 @@ def home():
         query = query.order_by(Book.title)
         
     books = query.all()
-    return render_template('home.html', books=books)
+    # search_query'yi de gönderiyoruz ki template içinde kontrol edebilelim
+    return render_template('home.html', books=books, search_query=search_query)
         
-    
-    
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    db.session.delete(book)
+    db.session.commit()
+    flash('Book deleted successfully!', 'success')
+    return redirect(url_for('home'))
 
     
-
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
