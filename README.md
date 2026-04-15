@@ -46,6 +46,8 @@
 .
 ├── app.py              # Main Flask application & routes
 ├── data_models.py      # Database models (Author & Book)
+├── .env                # Environment variables (Configuration)
+├── requirements.txt    # Project dependencies
 ├── screenshots/        # Project screenshots
 ├── static/
 │   └── css/
@@ -55,17 +57,28 @@
 
 ## 🚀 Getting Started
 
-1. **Install dependencies**:
+1. **Setup Virtual Environment**:
    ```bash
-   pip install Flask Flask-SQLAlchemy
+   python3 -m venv .venv
+   source .venv/bin/activate  # On macOS/Linux
+   # .venv\Scripts\activate  # On Windows
    ```
 
-2. **Run the application**:
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Environment Configuration**:
+   Create a `.env` file in the root directory (already provided in this repo) and configure your `SECRET_KEY` and `DATABASE_URL`.
+
+4. **Run the application**:
    ```bash
    python app.py
    ```
+   *Note: If you are NOT using an activated virtual environment, use `./.venv/bin/python3 app.py`*
 
-3. **Access the library**:
+5. **Access the library**:
    Open [http://localhost:5001](http://localhost:5001) in your browser.
 
 ---

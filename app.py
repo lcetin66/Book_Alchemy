@@ -4,14 +4,19 @@ This is a simple web application that allows users to add and view books and aut
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
+from dotenv import load_dotenv
 from data_models import db, Author, Book
+
+# Load environment variables from .env file
+load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hallo_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL', f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
+)
 
 # Initialize db with app
 db.init_app(app)
@@ -114,10 +119,14 @@ def author_details(author_id):
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):
     """Delete a specific book."""
-    book = Book.query.get_or_404(book_id)
-    db.session.delete(book)
-    db.session.commit()
-    flash('Book deleted successfully!', 'success')
+    try:
+        book = Book.query.get_or_404(book_id)
+        db.session.delete(book)
+        db.session.commit()
+        flash('Book deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting book: {e}', 'error')
     return redirect(url_for('home'))
 
 
