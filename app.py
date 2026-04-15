@@ -4,11 +4,8 @@ This is a simple web application that allows users to add and view books and aut
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
-from dotenv import load_dotenv
 from data_models import db, Author, Book
 
-# Load environment variables from .env file
-load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -131,4 +128,4 @@ def delete_book(book_id):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5002, debug=False)
